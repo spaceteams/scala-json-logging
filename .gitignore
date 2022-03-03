@@ -1,0 +1,8 @@
+.idea
+.metals
+.bloop
+/.bsp/
+target/
+
+.direnv
+.envrc

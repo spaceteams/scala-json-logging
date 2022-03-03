@@ -1,0 +1,44 @@
+name: CI
+
+on: ["push", "pull_request"]
+
+jobs:
+  fix:
+    name: ScalaFix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: olafurpg/setup-scala@v10
+        with:
+          java-version: openjdk@1.17
+      - uses: coursier/cache-action@v6.2
+
+      - name: Check scalafix
+        run: |
+          sbt "scalafixAll --check"
+  fmt:
+    name: ScalaFmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: olafurpg/setup-scala@v10
+        with:
+          java-version: openjdk@1.17
+      - uses: coursier/cache-action@v6.2
+
+      - name: Check scalafmt
+        run: |
+          sbt "scalafmtCheckAll"
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: olafurpg/setup-scala@v10
+        with:
+          java-version: openjdk@1.17
+      - uses: coursier/cache-action@v6.2
+
+      - name: Run tests
+        run: |
+          sbt "+test"
