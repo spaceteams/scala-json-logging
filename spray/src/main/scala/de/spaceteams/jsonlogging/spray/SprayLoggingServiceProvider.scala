@@ -1,10 +1,12 @@
 package de.spaceteams.jsonlogging.spray
 
+import de.spaceteams.jsonlogging.JsonLogger
+import de.spaceteams.jsonlogging.JsonLoggerFactory
 import de.spaceteams.jsonlogging.JsonLoggerServiceProvider
-import org.slf4j.ILoggerFactory
 
 class SprayLoggingServiceProvider extends JsonLoggerServiceProvider {
-  override def getLoggerFactory: ILoggerFactory = SprayLoggerFactory(
-    getMDCAdapter
-  )
+  override val getLoggerFactory: JsonLoggerFactory[_ <: JsonLogger] =
+    SprayLoggerFactory(
+      getMDCAdapter
+    )
 }

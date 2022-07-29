@@ -2,24 +2,43 @@ lazy val scala_2_13 = "2.13.8"
 lazy val scala_3_1 = "3.1.1"
 lazy val supportedScalaVersions = Seq(scala_2_13, scala_3_1)
 
+Global / semanticdbEnabled := true
+Global / semanticdbVersion := scalafixSemanticdb.revision
 
-Global / organization := "de.spaceteams"
-Global / licenses := Seq(("BSD-3", url("https://www.apache.org/licenses/LICENSE-2.0.html")))
-Global / homepage := Some(url("http://github.com/spaceteams/scala-json-logging"))
-Global / description := "An slf4j scala backend for cloud native environments"
-Global / scmInfo := Some(
+ThisBuild / organization := "de.spaceteams"
+ThisBuild / licenses := Seq(
+  ("BSD-3", url("https://opensource.org/licenses/BSD-3-Clause"))
+)
+ThisBuild / homepage := Some(
+  url("http://github.com/spaceteams/scala-json-logging")
+)
+ThisBuild / description := "An slf4j scala backend for cloud native environments"
+ThisBuild / scmInfo := Some(
   ScmInfo(
     url("http://github.com/spaceteams/scala-json-logging"),
     "scm:git:http://github.com/spaceteams/scala-json-logging.git",
-    "scm:git:git@github.com:spaceteams/scala-json-logging.git"))
+    "scm:git:git@github.com:spaceteams/scala-json-logging.git"
+  )
+)
+
+ThisBuild / developers := List(
+  Developer(
+    "kampka",
+    "Christian Kampka",
+    "christian.kampka@spaceteams.de",
+    url("https://www.spaceteams.de")
+  )
+)
+
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
+ThisBuild / sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 
 ThisBuild / scalaVersion := scala_2_13
-ThisBuild / version := "0.99.0"
+ThisBuild / version := "0.99.0-SNAPSHOT"
+ThisBuild / versionScheme := Some("semver-spec")
 ThisBuild / fork := true
 ThisBuild / useCoursier := true
 
-ThisBuild / semanticdbEnabled := true
-ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 ThisBuild / scalafixScalaBinaryVersion := scalaBinaryVersion.value
 ThisBuild / scalafixDependencies := Seq(
   "com.github.liancheng" %% "organize-imports" % "0.6.0"
@@ -36,7 +55,7 @@ ThisBuild / libraryDependencies ++= (CrossVersion
       "org.scala-lang" % "scala3-library_3" % scalaVersion.value % Provided
     )
 }) ++ Seq(
-  "org.slf4j" % "slf4j-api" % "2.0.0-alpha6" % Provided,
+  "org.slf4j" % "slf4j-api" % "2.0.0-alpha7" % Provided,
   "org.scalatest" %% "scalatest" % "3.2.11" % Test
 )
 
@@ -72,7 +91,16 @@ lazy val spray = (project in file("spray"))
   .settings(commonSettings)
   .settings(
     moduleName := "json-logging-spray",
+    libraryDependencies += "io.spray" %% "spray-json" % "1.3.6" % Provided
+  )
+
+lazy val typesafeConfig = (project in file("typesafe-config"))
+  .dependsOn(common, spray % Test)
+  .settings(commonSettings)
+  .settings(
+    moduleName := "json-logging-typesafe-config",
     libraryDependencies ++= Seq(
-      "io.spray" %% "spray-json" % "1.3.6" % Provided
+      "com.typesafe" % "config" % "1.4.2" % Provided,
+      "io.spray" %% "spray-json" % "1.3.6" % Test
     )
   )

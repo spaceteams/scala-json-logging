@@ -57,15 +57,18 @@ abstract class JsonLogger(
       children.foreach(child => child.handleParentLevelChange(newLevel))
     }
 
-  private[jsonlogging] def createChild(childName: String): JsonLogger =
-    synchronized {
-      val instance = mkChildInstance(childName)
+  private[jsonlogging] def createChild(childName: String): JsonLogger = {
+    children.find(_.getName == childName).getOrElse {
+      synchronized {
+        val instance = mkChildInstance(childName)
 
-      instance.levelInt = levelInt
+        instance.levelInt = levelInt
 
-      children = instance :: children
-      instance
+        children = instance :: children
+        instance
+      }
     }
+  }
 
   private[jsonlogging] def handleParentLevelChange(
       newLevel: Option[Level]

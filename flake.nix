@@ -1,9 +1,14 @@
 {
-  outputs = { self, nixpkgs }: let 
-    pkgs = nixpkgs.legacyPackages."x86_64-linux";
-  in{
-    devShell."x86_64-linux" = pkgs.mkShell {
-      packages = with pkgs; [ sbt jdk bloop ];
-    };
-  };
+  inputs.utils.url = "github:numtide/flake-utils";
+
+  outputs = { self, nixpkgs, utils }: utils.lib.eachDefaultSystem (system:
+    let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
+    {
+      devShell = pkgs.mkShell {
+        packages = with pkgs; [ sbt jdk bloop coursier ];
+      };
+    }
+  );
 }

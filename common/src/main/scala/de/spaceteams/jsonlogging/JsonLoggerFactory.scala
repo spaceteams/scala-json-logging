@@ -5,11 +5,10 @@ import org.slf4j.Logger
 import org.slf4j.event.Level
 
 import java.util.concurrent.ConcurrentHashMap
-import scala.annotation.tailrec
 
 abstract class JsonLoggerFactory[T <: JsonLogger] extends ILoggerFactory {
 
-  private val loggers = new ConcurrentHashMap[String, Logger]()
+  private val loggers = new ConcurrentHashMap[String, JsonLogger]()
 
   protected def mkRootLogger(name: String): T
 
@@ -19,34 +18,27 @@ abstract class JsonLoggerFactory[T <: JsonLogger] extends ILoggerFactory {
     l
   }
 
-  @tailrec
   private def buildChildLogger(
-      prefix: List[String],
       names: List[String],
       parent: JsonLogger
   ): JsonLogger = {
-    def createChild(name: List[String]): JsonLogger = {
-      val c = parent.createChild(name.reverse.mkString("."))
-      loggers.put(c.getName, c)
-      c
-    }
-    names match {
-      case Nil         => parent
-      case head :: Nil => createChild(head :: prefix)
-      case head :: tail =>
-        val p = head :: prefix
-        buildChildLogger(p, tail, createChild(p))
-    }
+    names.foldLeft(parent)((p, name) => {
+      val child = p.createChild(name)
+      child
+    })
   }
 
   override def getLogger(name: String): Logger = {
     if (name == JsonLoggerFactory.rootLoggerName)
       return rootLogger
 
-    Option(loggers.get(name)).getOrElse({
-      val names = name.split('.').toList
-      buildChildLogger(Nil, names, rootLogger)
-    })
+    loggers.computeIfAbsent(
+      name,
+      (_: String) => {
+        val names = name.split('.').toList
+        buildChildLogger(names, rootLogger)
+      }
+    )
   }
 }
 

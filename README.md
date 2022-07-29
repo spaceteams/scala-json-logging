@@ -36,7 +36,6 @@ ThisBuild / libraryDependencies += "de.spaceteams" %% "json-logging-spray" % <ve
 
 ## Configuration
 
-This backend does not support configuration via any external config file of configuration logic.
 Loggers and levels can be configured programatically.
 
 ```scala
@@ -44,8 +43,31 @@ val logger = LoggerFactory.getLogger("logger-name")
 logger.asInstanceOf[JsonLogger].setLevel(Some(Level.INFO))
 ```
 
-If support for a config file format is warrented, it can easily be implemented on top of this API by it's user.
+The backend does not come with any support for configuration files or similar mechanisms built-in.
+If desired, a configuration system can be plugged in by providing a [`Service Provider`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ServiceLoader.html) that implements the [`de.spaceteams.jsonlogging.ConfigurationService`](./common/src/main/scala/de/spaceteams/jsonlogging/ConfigurationService.scala) interface.
 
+The `typesafe-config` sub-module is included as an example of how such a service provider might look like.
+
+### Typesafe Config
+
+The `typesafe-config` service provider can be used to apply simple configurations via the well-known [Typesafe Config](https://github.com/lightbend/config) library that comes included in many scala frameworks.
+
+To make use of it, include it as a dependency in your `build.sbt`:
+```scala
+ThisBuild / libraryDependencies += "de.spaceteams" %% "json-logging-typesafe-config" % <version>
+```
+
+Logger configuration can then be defined in a projects `application.conf`
+```hocon
+logging {
+    levels {
+        "de.spaceteams" = "TRACE"
+        "de.spaceteams.logging" = "DEBUG"
+    }
+}
+```
+
+### Hirarchy
 The backend supports the concept of a named hirarchy.
 
 A logger is said to be an ancestor of another logger if its name followed by a dot is a prefix of the descendant logger name. A logger is said to be a parent of a child logger if there are no ancestors between itself and the descendant logger. 
@@ -86,3 +108,4 @@ SLF4J 2 is currently alpha quality. Use it at your own risk.
 As its APIs and behavior might be subject to change, so is the implementation of this backend.
 We strive to provide a stable version of this library as soon as SLF4J 2 as a stable release.
 
+The current version was not optimized for performance in any way.
