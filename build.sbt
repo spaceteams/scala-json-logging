@@ -34,7 +34,7 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 ThisBuild / sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 
 ThisBuild / scalaVersion := scala_2_13
-ThisBuild / version := "0.99.1-SNAPSHOT"
+ThisBuild / version := "0.99.2-SNAPSHOT"
 ThisBuild / versionScheme := Some("semver-spec")
 ThisBuild / fork := true
 ThisBuild / useCoursier := true
@@ -103,4 +103,10 @@ lazy val typesafeConfig = (project in file("typesafe-config"))
       "com.typesafe" % "config" % "1.4.2" % Provided,
       "io.spray" %% "spray-json" % "1.3.6" % Test
     )
+  )
+
+lazy val root = (project in file("."))
+  .aggregate(common, circe, spray, typesafeConfig)
+  .settings(
+    publish / skip := true
   )
