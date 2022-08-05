@@ -34,7 +34,7 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 ThisBuild / sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 
 ThisBuild / scalaVersion := scala_2_13
-ThisBuild / version := "0.99.0-SNAPSHOT"
+ThisBuild / version := "0.99.1-SNAPSHOT"
 ThisBuild / versionScheme := Some("semver-spec")
 ThisBuild / fork := true
 ThisBuild / useCoursier := true
@@ -72,7 +72,7 @@ lazy val commonSettings = Seq(
 lazy val common = (project in file("common"))
   .settings(commonSettings)
   .settings(
-    publish := false
+    moduleName := "json-logging-common"
   )
 
 lazy val circe = (project in file("circe"))
