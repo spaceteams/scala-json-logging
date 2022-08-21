@@ -34,7 +34,7 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 ThisBuild / sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 
 ThisBuild / scalaVersion := scala_2_13
-ThisBuild / version := "1.0.0"
+ThisBuild / version := "1.1.0-SNAPSHOT"
 ThisBuild / versionScheme := Some("semver-spec")
 ThisBuild / fork := true
 ThisBuild / useCoursier := true
