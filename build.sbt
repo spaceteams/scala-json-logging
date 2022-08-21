@@ -34,7 +34,7 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 ThisBuild / sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 
 ThisBuild / scalaVersion := scala_2_13
-ThisBuild / version := "0.99.2-SNAPSHOT"
+ThisBuild / version := "1.0.0"
 ThisBuild / versionScheme := Some("semver-spec")
 ThisBuild / fork := true
 ThisBuild / useCoursier := true
@@ -55,7 +55,7 @@ ThisBuild / libraryDependencies ++= (CrossVersion
       "org.scala-lang" % "scala3-library_3" % scalaVersion.value % Provided
     )
 }) ++ Seq(
-  "org.slf4j" % "slf4j-api" % "2.0.0-alpha7" % Provided,
+  "org.slf4j" % "slf4j-api" % "2.0.0" % Provided,
   "org.scalatest" %% "scalatest" % "3.2.11" % Test
 )
 

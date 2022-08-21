@@ -4,7 +4,7 @@ An [SLF4J](https://www.slf4j.org/index.html) backend that provides opinionated J
 
 It takes an SLF4J logging event and produces a `JSON` structured log line including context information to the process `STDOUT`.
 
-It requires SLF4J version 2+ which is currently **alpha quality**.
+It requires at least SLF4J version 2.0.0.
 
 It supports Scala 2.13+ and Scala 3.1+
 
@@ -104,8 +104,4 @@ produces a log line similar to
 
 ## Caveats
 
-SLF4J 2 is currently alpha quality. Use it at your own risk.
-As its APIs and behavior might be subject to change, so is the implementation of this backend.
-We strive to provide a stable version of this library as soon as SLF4J 2 as a stable release.
-
-The current version was not optimized for performance in any way.
+The current version was not optimized for performance.
