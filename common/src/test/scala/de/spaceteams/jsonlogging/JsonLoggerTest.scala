@@ -140,6 +140,16 @@ class JsonLoggerTest extends AnyWordSpec with Matchers {
         child.isInfoEnabled mustBe false
         child.isWarnEnabled mustBe true
       }
+
+      "logs full logger name in output" in {
+        val parent = mkLogger("de.spaceteams", null)
+
+        parent.setLevel(Some(Level.WARN))
+
+        val child = parent.createChild("logging.child")
+
+        child.fullName mustBe "de.spaceteams.logging.child"
+      }
     }
   }
 }

@@ -14,6 +14,7 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 import scala.collection.mutable
 import scala.jdk.javaapi.CollectionConverters
+import org.slf4j.Logger
 
 abstract class JsonLogger(
     name: String,
@@ -23,6 +24,16 @@ abstract class JsonLogger(
 ) extends LegacyAbstractLogger {
 
   override def getName: String = name
+
+  private[jsonlogging] val fullName: String = {
+    if (parent == null || parent.name == Logger.ROOT_LOGGER_NAME) {
+      name
+    } else {
+      (parent.fullName + s".${name}").stripPrefix(
+        s"${Logger.ROOT_LOGGER_NAME}."
+      )
+    }
+  }
 
   val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ISO_INSTANT
 
@@ -112,7 +123,7 @@ abstract class JsonLogger(
     val message = MessageFormatter.basicArrayFormat(msg, arguments)
     map.put("message", message)
 
-    map.put("logger", name)
+    map.put("logger", fullName)
     Option(throwable).foreach(t => {
       val sw = new StringWriter
       t.printStackTrace(new PrintWriter(sw))
